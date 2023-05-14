@@ -88,7 +88,7 @@ namespace SaleManagementClient
 		}
 		private void BindImageToImageBox()
 		{
-			//slow
+			//slower
 			/*var request = WebRequest.Create(dgvProducts.CurrentRow.Cells["Image"].Value.ToString());
 			using (var response = request.GetResponse())
 			using (var stream = response.GetResponseStream())
