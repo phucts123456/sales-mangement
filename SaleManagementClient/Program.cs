@@ -37,12 +37,14 @@ namespace SaleManagementClient
 					services.AddSingleton<frmEmployeeUpdateOrCreate>();
 					services.AddSingleton<frmMaterials>();
 					services.AddSingleton<frmProducts>();
+					services.AddSingleton<frmOrders>();
 					services.AddSingleton<IEmployeeRepository, EmployeeRepository>();
 					services.AddSingleton<IProductRepository, ProductRepository>();
 					services.AddTransient<IPhotoAccessor, PhotoAccessor>();
 					services.AddSingleton<IMaterialRepository, MaterialRepository>();
 					services.AddSingleton<ICustomerRepository, CustomerRepository>();
-					Console.WriteLine(Configuration.GetSection("Cloudinary").Exists());
+					services.AddSingleton<IOrderRepository, OrderRepository>();
+					services.AddSingleton<IOrderDetailRepository, OrderDetailRepository>();
 					services.Configure<CloudinarySettings>(Configuration.GetSection("Cloudinary"));
 				})
 				.Build();

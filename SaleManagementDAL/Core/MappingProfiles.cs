@@ -13,6 +13,8 @@ namespace SaleManagementDAL.Core
 			CreateMap<Material,MaterialDto>().ReverseMap();
 			CreateMap<Customer,CustomerDto>().ReverseMap();
 			CreateMap<Product,ProductDto>().ReverseMap();
+			CreateMap<Order,OrderDto>().ReverseMap();
+			CreateMap<OrderDetail,OrderDetailDto>().ReverseMap();
 		}
 	}
 }

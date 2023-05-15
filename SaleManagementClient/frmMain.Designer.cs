@@ -98,6 +98,7 @@
 			this.ordersToolStripMenuItem.Name = "ordersToolStripMenuItem";
 			this.ordersToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
 			this.ordersToolStripMenuItem.Text = "Orders";
+			this.ordersToolStripMenuItem.Click += new System.EventHandler(this.ordersToolStripMenuItem_Click);
 			// 
 			// materialsToolStripMenuItem
 			// 

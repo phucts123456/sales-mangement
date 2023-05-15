@@ -4,30 +4,27 @@ using Microsoft.EntityFrameworkCore;
 using SaleManagementDAL.Core;
 using SaleManagementDAL.Dtos;
 using SaleManagementDAL.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SaleManagementDAL.DAO
 {
-	public class ProductDAO
+	public class OrderDAO
 	{
-		private static ProductDAO instance = null;
-		private static readonly object instanceLock = new object();
-		private ProductDAO() { }
-		public static ProductDAO Instance { get 
-			{ 
+		private static OrderDAO instance = null;
+		private readonly static object instanceLock = new object();
+		public static OrderDAO Instance
+		{
+			get
+			{
 				lock(instanceLock)
 				{
 					if(instance == null)
 					{
-						instance = new ProductDAO();
+						instance = new OrderDAO();
 					}
 				}
 				return instance;
-			} 
+			}
 		}
 		private static IMapper GetMappingConfig()
 		{
@@ -37,13 +34,13 @@ namespace SaleManagementDAL.DAO
 			});
 			return new Mapper(config);
 		}
-		public IEnumerable<ProductDto> GetProducts()
+		public IEnumerable<OrderDto> GetOrders()
 		{
 			//var dest = mapper.Map<Source, Dest>(new Source());
 			var saleManagementContext = new sales_managementContext();
-			return saleManagementContext.Products.ProjectTo<ProductDto>(GetMappingConfig().ConfigurationProvider).ToList();
+			return saleManagementContext.Orders.Include(o => o.Employee).Include(o => o.Customer).ProjectTo<OrderDto>(GetMappingConfig().ConfigurationProvider).ToList();
 		}
-		public (bool result, string reason) AddProduct(ProductDto productDto)
+		public (bool result, string reason) AddOrder(OrderDto orderDto)
 		{
 			var config = new MapperConfiguration(cfg => {
 				cfg.AddProfile<MappingProfiles>();
@@ -53,8 +50,8 @@ namespace SaleManagementDAL.DAO
 			try
 			{
 				var saleManagementContext = new sales_managementContext();
-				var product = GetMappingConfig().Map<Product>(productDto);
-				saleManagementContext.Products.Add(product);
+				var order = GetMappingConfig().Map<Order>(orderDto);
+				saleManagementContext.Orders.Add(order);
 				if (saleManagementContext.SaveChanges() > 0)
 				{
 					return (true, "");
@@ -66,7 +63,7 @@ namespace SaleManagementDAL.DAO
 			}
 			return (false, "Add failed. Unknow exception.");
 		}
-		public (bool result, string reason) UpdateProduct(ProductDto productDto)
+		public (bool result, string reason) UpdateOrder(OrderDto orderDto)
 		{
 			var config = new MapperConfiguration(cfg => {
 				cfg.AddProfile<MappingProfiles>();
@@ -76,8 +73,8 @@ namespace SaleManagementDAL.DAO
 			try
 			{
 				var saleManagementContext = new sales_managementContext();
-				var product = GetMappingConfig().Map<Product>(productDto);
-				saleManagementContext.Products.Update(product);
+				var order = GetMappingConfig().Map<Order>(orderDto);
+				saleManagementContext.Orders.Update(order);
 				if (saleManagementContext.SaveChanges() > 0)
 				{
 					return (true, "");
@@ -89,7 +86,7 @@ namespace SaleManagementDAL.DAO
 			}
 			return (false, "Update failed. Unknow exception.");
 		}
-		public (bool result, string reason) RemoveProduct(ProductDto productDto)
+		public (bool result, string reason) RemoveOrder(OrderDto orderDto)
 		{
 			var config = new MapperConfiguration(cfg => {
 				cfg.AddProfile<MappingProfiles>();
@@ -99,8 +96,10 @@ namespace SaleManagementDAL.DAO
 			try
 			{
 				var saleManagementContext = new sales_managementContext();
-				var product = GetMappingConfig().Map<Product>(productDto);
-				saleManagementContext.Products.Remove(product);
+				var order = GetMappingConfig().Map<Order>(orderDto);
+				if (saleManagementContext.OrderDetails.Any(x => x.OrderId == orderDto.OrderId))
+					return (false, "Delete failed. This order already have had at least 1 order detail.");
+				saleManagementContext.Orders.Remove(order);
 				if (saleManagementContext.SaveChanges() > 0)
 				{
 					return (true, "");

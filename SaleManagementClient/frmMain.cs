@@ -9,7 +9,8 @@ namespace SaleManagementClient
 		private readonly frmMaterials _frmMaterials;
 		private readonly frmCustomers _frmCustomers;
 		private readonly frmProducts _frmProducts;
-		public frmMain(frmEmployees frmEmployees, frmMaterials frmMaterials, frmCustomers frmCustomers, frmProducts frmProducts)
+		private readonly frmOrders _frmOrders;
+		public frmMain(frmEmployees frmEmployees, frmMaterials frmMaterials, frmCustomers frmCustomers, frmProducts frmProducts, frmOrders frmOrders)
 		{
 			//BackgroundImage = Properties.Resources.blueBackgroud;
 			InitializeComponent();
@@ -21,6 +22,7 @@ namespace SaleManagementClient
 			_frmMaterials = frmMaterials;
 			_frmCustomers = frmCustomers;
 			_frmProducts = frmProducts;
+			_frmOrders = frmOrders;
 		}
 
 		private void employeesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -41,6 +43,11 @@ namespace SaleManagementClient
 		private void productsToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			_frmProducts.ShowDialog();
+		}
+
+		private void ordersToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			_frmOrders.ShowDialog();
 		}
 	}
 }
