@@ -61,7 +61,6 @@ namespace SaleManagementClient
 		}
 		private MaterialDto GetSelectedMaterialFromGdv()
 		{
-			DateTime dateOfBirth;
 			sbyte materialId;
 			string materialName = dgvMaterials.CurrentRow.Cells["MaterialName"].Value.ToString()!;
 			MaterialDto materialDto = new MaterialDto();

@@ -34,22 +34,51 @@ namespace SaleManagementClient
 
 		private void btnLoad_Click(object sender, EventArgs e)
 		{
-			OrderDto orderDto = _order.FirstOrDefault(x => x.OrderId == sbyte.Parse(cbOrders.SelectedValue.ToString()!))!;
-			txtAddress.Text = orderDto.Customer.Address;
-			txtPhoneNumber.Text = orderDto.Customer.PhoneNumber;
-			txtOrderDate.Text = orderDto.OrderDate.ToString();
-			txtOrderId.Text = orderDto.OrderId.ToString();
-			_employees = _employeeRepository.GetAll();
-			_customer = _customerRepository.GetAll();
-			cbCustomerName.DataSource= _customer;
-			cbCustomerName.DisplayMember = "CustomerName";
-			cbCustomerName.ValueMember = "CustomerId";
-			cbCustomerName.SelectedIndex = cbCustomerName.FindStringExact(_customer.FirstOrDefault(c => c.CustomerId == orderDto.CustomerId).CustomerName);
-			cbEmployeeName.DataSource = _employees;
-			cbEmployeeName.DisplayMember = "EmployeeName";
-			cbEmployeeName.ValueMember = "EmployeeId";
-			cbEmployeeName.SelectedIndex = cbEmployeeName.FindStringExact(_employees.FirstOrDefault(e => e.EmployeeId == orderDto.EmployeeId).EmployeeName);
+			LoadOrder();
 			LoadDataGridView();
+		}
+
+		private void LoadOrder(sbyte orderId = default(sbyte))
+		{
+			comboBoxLoad();
+			if (!orderId.Equals(default(sbyte)))
+			{
+				OrderDto orderDto = _order.FirstOrDefault(x => x.OrderId == orderId);
+				txtAddress.Text = orderDto.Customer.Address;
+				txtPhoneNumber.Text = orderDto.Customer.PhoneNumber;
+				txtOrderDate.Text = orderDto.OrderDate.ToString();
+				txtOrderId.Text = orderDto.OrderId.ToString();
+				_employees = _employeeRepository.GetAll();
+				_customer = _customerRepository.GetAll();
+				cbCustomerName.DataSource = _customer;
+				cbCustomerName.DisplayMember = "CustomerName";
+				cbCustomerName.ValueMember = "CustomerId";
+				cbCustomerName.SelectedIndex = cbCustomerName.FindStringExact(_customer.FirstOrDefault(c => c.CustomerId == orderDto.CustomerId).CustomerName);
+				cbEmployeeName.DataSource = _employees;
+				cbEmployeeName.DisplayMember = "EmployeeName";
+				cbEmployeeName.ValueMember = "EmployeeId";
+				cbEmployeeName.SelectedIndex = cbEmployeeName.FindStringExact(_employees.FirstOrDefault(e => e.EmployeeId == orderDto.EmployeeId).EmployeeName);
+				LoadDataGridView();
+			}
+			else
+			{
+				OrderDto orderDto = _order.FirstOrDefault(x => x.OrderId == sbyte.Parse(cbOrders.SelectedValue.ToString()!))!;
+				txtAddress.Text = orderDto.Customer.Address;
+				txtPhoneNumber.Text = orderDto.Customer.PhoneNumber;
+				txtOrderDate.Text = orderDto.OrderDate.ToString();
+				txtOrderId.Text = orderDto.OrderId.ToString();
+				_employees = _employeeRepository.GetAll();
+				_customer = _customerRepository.GetAll();
+				cbCustomerName.DataSource = _customer;
+				cbCustomerName.DisplayMember = "CustomerName";
+				cbCustomerName.ValueMember = "CustomerId";
+				cbCustomerName.SelectedIndex = cbCustomerName.FindStringExact(_customer.FirstOrDefault(c => c.CustomerId == orderDto.CustomerId).CustomerName);
+				cbEmployeeName.DataSource = _employees;
+				cbEmployeeName.DisplayMember = "EmployeeName";
+				cbEmployeeName.ValueMember = "EmployeeId";
+				cbEmployeeName.SelectedIndex = cbEmployeeName.FindStringExact(_employees.FirstOrDefault(e => e.EmployeeId == orderDto.EmployeeId).EmployeeName);
+				LoadDataGridView();
+			}
 		}
 
 		private void onDgv_Click(object sender, EventArgs e)
@@ -96,12 +125,6 @@ namespace SaleManagementClient
 		}
 		private OrderDto GetSelectedOrderDtoTxt()
 		{
-			DateTime orderDate;
-			string address;
-			string phoneNumber;
-			sbyte employeeId;
-			sbyte customerId;
-			sbyte orderId;
 			OrderDto orderDto = new OrderDto();
 			orderDto.OrderId = !string.IsNullOrEmpty(txtOrderId.Text) ? sbyte.Parse(txtOrderId.Text) : default(sbyte);
 			orderDto.OrderDate= !string.IsNullOrEmpty(txtOrderDate.Text) ? DateTime.Parse(txtOrderDate.Text) : default(DateTime);
@@ -114,13 +137,13 @@ namespace SaleManagementClient
 		}
 		private void btnAdd_Click(object sender, EventArgs e)
 		{
-			frmCreateOrUpdateOrder frmOrder = new frmCreateOrUpdateOrder(_employeeRepository, _customerRepository, null,true);
+			frmCreateOrUpdateOrder frmOrder = new frmCreateOrUpdateOrder(_employeeRepository, _customerRepository, _orderRepository, null,true, LoadOrder);
 			frmOrder.ShowDialog();
 		}
 
 		private void btnUpdate_Click(object sender, EventArgs e)
 		{
-			frmCreateOrUpdateOrder frmOrder = new frmCreateOrUpdateOrder(_employeeRepository, _customerRepository, GetSelectedOrderDtoTxt(),false);
+			frmCreateOrUpdateOrder frmOrder = new frmCreateOrUpdateOrder(_employeeRepository, _customerRepository, _orderRepository, GetSelectedOrderDtoTxt(),false, LoadOrder);
 			frmOrder.ShowDialog();
 		}
 	}

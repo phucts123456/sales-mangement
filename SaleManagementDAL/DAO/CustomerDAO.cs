@@ -42,6 +42,20 @@ namespace SaleManagementDAL.DAO
 			var saleManagementContext = new sales_managementContext();
 			return saleManagementContext.Customers.ProjectTo<CustomerDto>(GetMappingConfig().ConfigurationProvider).ToList();
 		}
+		public CustomerDto GetCustomerById(sbyte id)
+		{
+			var config = new MapperConfiguration(cfg => {
+				cfg.AddProfile<MappingProfiles>();
+				//cfg.CreateMap<Source, Dest>();
+			});
+			IMapper mapper = new Mapper(config);
+
+			var saleManagementContext = new sales_managementContext();
+			CustomerDto customerDto = saleManagementContext.Customers.ProjectTo<CustomerDto>(mapper.ConfigurationProvider).FirstOrDefault(c => c.CustomerId == id);
+			if (customerDto != null) 
+				return customerDto;	
+			return null;
+		}
 		public (bool result, string reason) AddCustomer(CustomerDto customer)
 		{
 			var config = new MapperConfiguration(cfg => {

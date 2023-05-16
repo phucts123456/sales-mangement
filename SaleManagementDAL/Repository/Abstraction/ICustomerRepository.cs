@@ -10,6 +10,7 @@ namespace SaleManagementDAL.Repository.Abstraction
 	public interface ICustomerRepository
 	{
 		IEnumerable<CustomerDto> GetAll();
+		CustomerDto GetCustomerById(sbyte id);
 		(bool result, string reason) Add(CustomerDto customer);
 		(bool result, string reason) Update(CustomerDto customer);
 		(bool result, string reason) Remove(CustomerDto customer);

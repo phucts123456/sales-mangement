@@ -117,7 +117,6 @@ namespace SaleManagementClient
 		private ProductDto GetSelectedProductFromGdv()
 		{
 			sbyte productId;
-			sbyte materialId;
 			decimal costOfGood;
 			decimal retailPrice;
 			int quantity;

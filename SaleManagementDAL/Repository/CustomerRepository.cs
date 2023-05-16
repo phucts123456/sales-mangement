@@ -14,6 +14,9 @@ namespace SaleManagementDAL.Repository
 	{
 		public (bool result, string reason) Add(CustomerDto customer) => CustomerDAO.Instance.AddCustomer(customer);
 		public IEnumerable<CustomerDto> GetAll() => CustomerDAO.Instance.GetCustomers();
+
+		public CustomerDto GetCustomerById(sbyte id) => CustomerDAO.Instance.GetCustomerById(id);
+
 		public (bool result, string reason) Remove(CustomerDto customer) => CustomerDAO.Instance.RemoveCustomer(customer);
 
 		public (bool result, string reason) Update(CustomerDto customer) => CustomerDAO.Instance.UpdateCustomer(customer);
