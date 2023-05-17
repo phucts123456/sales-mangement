@@ -187,6 +187,7 @@
 			this.Controls.Add(this.panel1);
 			this.Name = "frmCreateOrUpdateOrder";
 			this.Text = "frmCreateOrUpdateOrder";
+			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frm_Closed);
 			this.Load += new System.EventHandler(this.onFrm_Load);
 			this.panel1.ResumeLayout(false);
 			this.panel1.PerformLayout();

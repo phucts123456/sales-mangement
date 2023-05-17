@@ -40,9 +40,11 @@ namespace SaleManagementClient
 
 		private void LoadOrder(sbyte orderId = default(sbyte))
 		{
-			comboBoxLoad();
+			
 			if (!orderId.Equals(default(sbyte)))
 			{
+				comboBoxLoad();
+				string abc = orderId.ToString();
 				OrderDto orderDto = _order.FirstOrDefault(x => x.OrderId == orderId);
 				txtAddress.Text = orderDto.Customer.Address;
 				txtPhoneNumber.Text = orderDto.Customer.PhoneNumber;
@@ -62,6 +64,7 @@ namespace SaleManagementClient
 			}
 			else
 			{
+				string abc = cbOrders.SelectedValue.ToString();
 				OrderDto orderDto = _order.FirstOrDefault(x => x.OrderId == sbyte.Parse(cbOrders.SelectedValue.ToString()!))!;
 				txtAddress.Text = orderDto.Customer.Address;
 				txtPhoneNumber.Text = orderDto.Customer.PhoneNumber;
@@ -78,7 +81,9 @@ namespace SaleManagementClient
 				cbEmployeeName.ValueMember = "EmployeeId";
 				cbEmployeeName.SelectedIndex = cbEmployeeName.FindStringExact(_employees.FirstOrDefault(e => e.EmployeeId == orderDto.EmployeeId).EmployeeName);
 				LoadDataGridView();
+				comboBoxLoad();
 			}
+			
 		}
 
 		private void onDgv_Click(object sender, EventArgs e)

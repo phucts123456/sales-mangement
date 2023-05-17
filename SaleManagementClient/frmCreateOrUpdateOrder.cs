@@ -45,12 +45,23 @@ namespace SaleManagementClient
 				cbEmployeeName.SelectedIndex = cbEmployeeName.FindStringExact(_employees.FirstOrDefault(e => e.EmployeeId == _orderDto.EmployeeId).EmployeeName);
 				MessageBox.Show(cbEmployeeName.SelectedValue.ToString());
 				MessageBox.Show(cbCustomerName.SelectedValue.ToString());
-			}		
+			}
+			else
+			{
+				_customer = _customerRepository.GetAll();
+				_employees = _employeeRepository.GetAll();
+				cbCustomerName.DataSource = _customer;
+				cbCustomerName.DisplayMember = "CustomerName";
+				cbCustomerName.ValueMember = "CustomerId";
+				cbEmployeeName.DataSource = _employees;
+				cbEmployeeName.DisplayMember = "EmployeeName";
+				cbEmployeeName.ValueMember = "EmployeeId";
+			}
 		}
 		private OrderDto GetOrderFromTxt()
 		{
 			OrderDto orderObj = new OrderDto();
-			orderObj.EmployeeId = _orderDto.OrderId;
+			orderObj.OrderId = _orderDto != null ? _orderDto.OrderId : default(sbyte);
 			orderObj.EmployeeId = sbyte.Parse(cbEmployeeName.SelectedValue.ToString()!);
 			orderObj.OrderDate = DateTime.Parse(txtOrderDate.Text.ToString());
 			orderObj.CustomerId = sbyte.Parse(cbCustomerName.SelectedValue.ToString()!);
@@ -86,7 +97,15 @@ namespace SaleManagementClient
 
 		private void btnCancel_Click(object sender, EventArgs e)
 		{
-			_action.Invoke(_orderDto.OrderId);
+			Close();
+		}
+
+		private void frm_Closed(object sender, FormClosedEventArgs e)
+		{
+			if(_orderDto != null)
+				_action.Invoke(_orderDto.OrderId);
+			else
+				_action.Invoke(default(sbyte));
 		}
 	}
 }
